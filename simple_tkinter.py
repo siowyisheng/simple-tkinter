@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 import tkinter.messagebox as tkmessagebox
 from random import randint
 from PIL import Image, ImageTk
@@ -11,9 +12,9 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
-class App(tk.Frame):
+class App(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
+        ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
         def hello():
@@ -21,7 +22,7 @@ class App(tk.Frame):
 
         def donothing():
             filewin = tk.Toplevel(root)
-            button = tk.Button(filewin, text="Do nothing button")
+            button = ttk.Button(filewin, text="Do nothing button")
             button.pack()
 
         def show_about():
@@ -29,13 +30,13 @@ class App(tk.Frame):
             top.title("About")
             top.geometry("150x100")
 
-            f = tk.Frame(top, height=800, width=800)
+            f = ttk.Frame(top, height=800, width=800)
             f.pack()
 
             msg = tk.Message(f, text='Made by Siow Yi Sheng')
             msg.pack()
 
-            button = tk.Button(f, text="Dismiss", command=top.destroy)
+            button = ttk.Button(f, text="Dismiss", command=top.destroy)
             button.pack()
 
         def sel():
@@ -47,17 +48,12 @@ class App(tk.Frame):
             health_int = int(health.get().replace('Health: ', ''))
             new_health = f'Health: {health_int - n}'
             health.set(new_health)
-            tk.Label(root,
-                     text=f'You cut it for {n} damage',
-                     bg='#c8af6a',
-                     fg='green',
-                     font=('helvetica', 12, 'bold')).pack()
-            root.update_idletasks()
+            ttk.Label(root, text=f'You cut it for {n} damage').pack()
 
-        left = tk.Frame(root)
+        left = ttk.Frame(root)
         left.pack(side=tk.LEFT)
 
-        B1 = tk.Button(left, text="Say Hello", command=hello)
+        B1 = ttk.Button(left, text="Say Hello", command=hello)
         B1.pack()
 
         menubar = tk.Menu(root)
@@ -101,7 +97,7 @@ class App(tk.Frame):
 
         load = Image.open(resource_path("parrot.png"))
         render = ImageTk.PhotoImage(load)
-        img = tk.Label(left, image=render)
+        img = ttk.Label(left, image=render)
         img.image = render  # keep this line for use in garbage collection
         img.pack()
 
@@ -112,58 +108,59 @@ class App(tk.Frame):
             width=500).pack()
 
         health = tk.StringVar(value='Health: 20')
-        tk.Label(left,
-                 textvariable=health,
-                 fg='red',
-                 font=('helvetica', 12, 'bold')).pack()
+        style = ttk.Style()
+        style.configure("BW.TLabel",
+                        foreground="red",
+                        font=('helvetica', 12, 'bold'))
+        ttk.Label(
+            left,
+            textvariable=health,
+            style='BW.TLabel',
+        ).pack()
 
         var = tk.IntVar()
-        R1 = tk.Radiobutton(left,
-                            text="Option 1",
-                            variable=var,
-                            value=1,
-                            command=sel)
+        R1 = ttk.Radiobutton(left,
+                             text="Option 1",
+                             variable=var,
+                             value=1,
+                             command=sel)
         R1.pack()
 
-        R2 = tk.Radiobutton(left,
-                            text="Option 2",
-                            variable=var,
-                            value=2,
-                            command=sel)
+        R2 = ttk.Radiobutton(left,
+                             text="Option 2",
+                             variable=var,
+                             value=2,
+                             command=sel)
         R2.pack()
 
-        R3 = tk.Radiobutton(left,
-                            text="Option 3",
-                            variable=var,
-                            value=3,
-                            command=sel)
+        R3 = ttk.Radiobutton(left,
+                             text="Option 3",
+                             variable=var,
+                             value=3,
+                             command=sel)
         R3.pack()
 
-        label = tk.Label(left)
+        label = ttk.Label(left)
         label.pack()
 
         CheckVar1 = tk.IntVar()
-        C1 = tk.Checkbutton(left, text="Music", variable=CheckVar1)
+        C1 = ttk.Checkbutton(left, text="Music", variable=CheckVar1)
         C1.pack()
 
         CheckVar2 = tk.IntVar()
-        C2 = tk.Checkbutton(left, text="Video", variable=CheckVar2)
+        C2 = ttk.Checkbutton(left, text="Video", variable=CheckVar2)
         C2.pack()
 
-        right = tk.Frame()
+        right = ttk.Frame()
         right.pack(side=tk.RIGHT)
 
         v = tk.IntVar()
-        tk.Scale(right,
-                 from_=0,
-                 to=100,
-                 resolution=5,
-                 orient=tk.HORIZONTAL,
-                 variable=v).pack()
+        ttk.Scale(right, from_=0, to=100, orient=tk.HORIZONTAL,
+                  variable=v).pack()
 
-        F = tk.Frame()
+        F = ttk.Frame()
         F.pack()
-        scrollbar = tk.Scrollbar(F)
+        scrollbar = ttk.Scrollbar(F)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         mylist = tk.Listbox(F, yscrollcommand=scrollbar.set)
@@ -173,7 +170,7 @@ class App(tk.Frame):
         mylist.pack(side=tk.LEFT)
         scrollbar.config(command=mylist.yview)
 
-        mb = tk.Menubutton(right, text="condiments", relief=tk.RAISED)
+        mb = ttk.Menubutton(right, text="condiments")
         mb.pack()
         mb.menu = tk.Menu(mb, tearoff=0)
         mb["menu"] = mb.menu
@@ -191,20 +188,20 @@ class App(tk.Frame):
         text.config(state=tk.DISABLED)
         text.pack()
 
-        w = tk.Spinbox(right, from_=0, to=10)
+        w = ttk.Spinbox(right, from_=0, to=10)
         w.pack()
 
-        F = tk.Frame()
+        F = ttk.Frame()
         F.pack()
-        L1 = tk.Label(F, text="User Name")
+        L1 = ttk.Label(F, text="User Name")
         L1.pack(side=tk.LEFT)
-        E1 = tk.Entry(F, bd=5)
+        E1 = ttk.Entry(F)
         E1.pack(side=tk.RIGHT)
 
-        group = tk.LabelFrame(right, text="Group", padx=5, pady=5)
+        group = ttk.LabelFrame(right, text="Group")
         group.pack(padx=10, pady=10)
 
-        w = tk.Entry(group)
+        w = ttk.Entry(group)
         w.pack()
 
         variable = tk.StringVar()
@@ -213,10 +210,9 @@ class App(tk.Frame):
         w = tk.OptionMenu(right, variable, "one", "two", "three")
         w.pack()
 
-        tk.Button(text='Click Me', command=hello2, bg='brown',
-                  fg='white').pack(side=tk.BOTTOM)
+        ttk.Button(text='Click Me', command=hello2).pack(side=tk.BOTTOM)
 
-        tk.Label(right, text='awesome game').pack()
+        ttk.Label(right, text='awesome game').pack()
 
 
 if __name__ == "__main__":
